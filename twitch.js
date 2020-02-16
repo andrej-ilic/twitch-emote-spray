@@ -38,15 +38,9 @@ const fetchEmotes = () => {
 const init = () => {
   fetchEmotes();
 
-  const client = new window.tmi.Client({
-    channels: [channel]
-  });
-
-  client.connect();
-
-  client.on("message", (channel, tags, message, self) => {
-    if (tags.emotes) {
-      Object.keys(tags.emotes).forEach(emoteId => {
+  ComfyJS.onChat = (user, message, flags, self, extra) => {
+    if (extra.messageEmotes) {
+      Object.keys(extra.messageEmotes).forEach(emoteId => {
         showEmote(`https://static-cdn.jtvnw.net/emoticons/v1/${emoteId}/3.0`);
       });
     }
@@ -56,7 +50,9 @@ const init = () => {
         showEmote(emotes[word]);
       }
     });
-  });
+  };
+
+  ComfyJS.Init(channel);
 };
 
 init();
